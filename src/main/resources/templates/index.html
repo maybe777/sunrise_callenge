@@ -17,11 +17,14 @@
 
 <div class="container" id="content">
     <table class="table" id="dataTable"></table>
-        <div class="row">
-            <input type="number" id="col">
-            <input type="number" id="row">
-            <button type="button" id="tableSize" onclick="fillTable(document.querySelector('#dataTable'), document.getElementById('col').value, document.getElementById('row').value)">Применить</button>
-        </div>
+    <div class="row">
+        rows: <input type="number" id="col">
+        cols: <input type="number" id="row">
+        <button type="button" id="tableSize"
+                onclick="fillTable(document.querySelector('#dataTable'), document.getElementById('col').value, document.getElementById('row').value)">
+            Применить
+        </button>
+    </div>
 </div>
 
 <!-- Modal -->
@@ -49,6 +52,8 @@
 <script th:src="@{/js/table.js}"></script>
 <script type="javascript">
 
+
 </script>
 </body>
+
 </html>
