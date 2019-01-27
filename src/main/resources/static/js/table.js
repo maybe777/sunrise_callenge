@@ -36,3 +36,42 @@ function getSavedCell(v) {
     }
     return localStorage.getItem(v);
 }
+
+//call result table
+function calculate() {
+    var arr = tableToArray(document.getElementById('dataTable'));
+
+    $.ajax({
+        url: "/calculate",
+        method: 'post',
+        data: {
+            arr: arr
+        },
+        success: function (resultArr) {
+            console.log(resultArr);
+        },
+        error: function () {
+            console.log("fail");
+
+        }
+    });
+}
+
+//save cell contains into double dimentional array
+function tableToArray(table) {
+    var result = [];
+    var rows = table.rows;
+    var cells, t;
+
+    // Iterate over rows
+    for (var i=1, iLen=rows.length; i<iLen; i++) {
+        cells = rows[i].cells;
+        t = [];
+        // Iterate over cells
+        for (var j=1, jLen=cells.length; j<jLen; j++) {
+            t.push(cells[j].childNodes[0].value);
+        }
+        result.push(t);
+    }
+    return result;
+}

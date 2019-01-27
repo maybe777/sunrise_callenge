@@ -21,9 +21,10 @@
         rows: <input type="number" id="col">
         cols: <input type="number" id="row">
         <button type="button" id="tableSize"
-                onclick="fillTable(document.querySelector('#dataTable'), document.getElementById('col').value, document.getElementById('row').value)">
-            Применить
-        </button>
+                onclick="fillTable(document.querySelector('#dataTable'),
+                        document.getElementById('col').value,
+                        document.getElementById('row').value)">Применить</button>
+        <button type="button" id="calc" onclick="calculate()">Рассчитать</button>
     </div>
 </div>
 
