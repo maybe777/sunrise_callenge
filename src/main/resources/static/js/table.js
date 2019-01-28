@@ -4,7 +4,7 @@ window.onload = fillTable(document.querySelector('#dataTable'), 5, 5); //build d
 function fillTable(table, rows, cols, csvData) {
     document.querySelector('#dataTable').innerHTML = '';//purge table b4 build new
     var row;
-    var col;
+    var col = 0;
     if (csvData) var data = csvData.split("\n");       //if data exists begin split into cell values
     (rows) ? row = rows : row = data.length;                    //pick row value for overload method usage
     for (var i = 0; i < row; i++) {                             //start build table
@@ -87,13 +87,14 @@ function tableToArray(table) {
     var result = [];            //declare result variable
     var rows = table.rows;
     var cells, t;
-    for (var i = 1, iLen = rows.length; i < iLen; i++) {       //iterate over rows
+    for (var i = 0, iLen = rows.length; i < iLen; i++) {       //iterate over rows
         cells = rows[i].cells;
         t = [];
-        for (var j = 1, jLen = cells.length; j < jLen; j++) {  //iterate over cols
+        for (var j = 0, jLen = cells.length; j < jLen; j++) {  //iterate over cols
             t.push(cells[j].childNodes[0].value);              //write data
         }
         result.push(t);
     }
+    console.log(result);                                       //log result for debug
     return result;
 }
