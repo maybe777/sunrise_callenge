@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.Arrays;
 import java.util.Map;
 
 @Controller
@@ -28,41 +29,15 @@ public class AppController {
     }
 
     @PostMapping(value = "/calculate")
-    public ResponseEntity<String> getResult(@RequestParam Map<String, String> arr) {
-//        String[] fruit1DArray;
-//        String[][] fruit2DArray;
-//
-//        Map<String, String> fruitMap = new HashMap<>();
-//
-//        fruit2DArray   = map.entrySet()
-//                .stream()
-//                .map(e -> new String[]{e.getKey(),e.getValue()})
-//                .toArray(String[][]::new);
+    public ResponseEntity<String> getResult(@RequestParam ("arr") String str) {
 
-//        String[][] array = new String[map.size()][2];
-//        int count = 0;
-//        for (Map.Entry<String,String[]> entry : map.entrySet()){
-//            array[count][0] = entry.getKey();
-//            array[count][1] = entry.getValue();
-//            count++;
-//        }
-//
-//        String[][] arrResult = calculation.evaluateTable(array);
+        String[][] arrResult = calculation.evaluateTable
+                (Arrays.stream(str.substring(2, str.length() - 2)
+                        .split("\\],\\["))
+                        .map(e -> Arrays.stream(e.split("\\s*,\\s*"))
+                                .toArray(String[]::new)).toArray(String[][]::new));
 
-
-        //        array = array.replace("],[","@");
-//        String[] arr = array.split("@");
-//        int count2 = 0;
-//        if (arr.length>0) {
-//            String templ = arr[0].replace("[","");
-//            String[] row = templ.split(",");
-//            count2 = row.length;
-//        }
-//        for (String row : arr) {
-//
-//        }
-        //        String[][] result = calculation.evaluateTable(arr);
-
+        System.out.print(Arrays.deepToString(arrResult));
         return ResponseEntity.ok("dsfsdf");
     }
 

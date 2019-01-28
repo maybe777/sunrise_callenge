@@ -70,7 +70,7 @@ function calculate() {
         url: "/calculate",
         method: 'post',
         data: {
-            arr: arr
+            arr: JSON.stringify(arr)
         },
         success: function (resultArr) {
             console.log(resultArr);

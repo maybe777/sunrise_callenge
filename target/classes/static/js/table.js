@@ -11,7 +11,6 @@ function fillTable(table, rows, cols, csvData) {
         if (data != null) var cellData = data[i].split(";");  //if data exists split into rows
         var tr = document.createElement('tr');                //create row
         (cols) ? col = cols : col = cellData.length;                   //pick column value for overload method usage
-        if (col < cellData.length) col = cellData.length;
         for (var j = 0; j < col; j++) {                                //begin build columns
             var cellId = String.fromCharCode(97 + j) + (i + 1); //get char code & generate cell id
             var td = document.createElement('td');            //create td element
@@ -71,7 +70,7 @@ function calculate() {
         url: "/calculate",
         method: 'post',
         data: {
-            arr: arr
+            arr: JSON.stringify(arr)
         },
         success: function (resultArr) {
             console.log(resultArr);
@@ -96,6 +95,6 @@ function tableToArray(table) {
         }
         result.push(t);
     }
-    console.log(result);
+    console.log(result);                                       //log result for debug
     return result;
 }
