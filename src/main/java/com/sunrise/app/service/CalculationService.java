@@ -372,10 +372,7 @@ public class CalculationService {
     }
 
     private List<String> iterateAndRemoveNull(List<String> arrayList) {
-        Iterator iterator = arrayList.iterator();
-        while (iterator.hasNext()) {
-            if (iterator.next().equals("")) iterator.remove();
-        }
+        arrayList.removeIf(o -> o.equals(""));
         return arrayList;
     }
 }

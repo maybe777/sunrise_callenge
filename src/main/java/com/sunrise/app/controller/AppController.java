@@ -24,7 +24,6 @@ public class AppController {
 
     @GetMapping("/")
     public ModelAndView index() {
-
         return new ModelAndView("index");
     }
 
@@ -58,11 +57,6 @@ public class AppController {
 //            String templ = arr[0].replace("[","");
 //            String[] row = templ.split(",");
 //            count2 = row.length;
-//
-//
-//
-//
-//
 //        }
 //        for (String row : arr) {
 //
