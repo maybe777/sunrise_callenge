@@ -45,7 +45,7 @@ function getSavedCell(v) {
 
 function uploadCsv() {
     var fileUpload = document.getElementById("csvFile");  //get file from element
-    var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.csv|.txt)$/;             //check extension
+    var regex = /(.csv)$/;                                          //check extension
     if (regex.test(fileUpload.value.toLowerCase())) {               //if extension is valid we begin read data
         if (typeof (FileReader) != "undefined") {                   //check data consistency
             var reader = new FileReader();                          //create reader object
@@ -54,10 +54,10 @@ function uploadCsv() {
             };
             reader.readAsText(fileUpload.files[0]);                 //read bad data if there is any
         } else {
-            alert("This browser does not support HTML5.");          //custom exception handle
+            alert("Используйте браузер с поддержкой HTML5");        //custom exception handle
         }
     } else {
-        alert("Please upload a valid CSV file.");                   //custom exception handle
+        alert("Просьба использовать файл с расширением *.csv");     //custom exception handle
     }
 }
 
@@ -66,7 +66,7 @@ function uploadCsv() {
 function calculate() {
     var arr = tableToArray(document.getElementById('dataTable'));   //get element
 
-    $.ajax({                                    //use ajax to call backend methods
+    $.ajax({                                                //use ajax to call backend methods
         url: "/calculate",
         method: 'post',
         data: {
@@ -83,18 +83,38 @@ function calculate() {
 }
 
 //save cell contains into double dimensional array
-function tableToArray(table) {
-    var result = [];            //declare result variable
-    var rows = table.rows;
-    var cells, t;
-    for (var i = 0, iLen = rows.length; i < iLen; i++) {       //iterate over rows
-        cells = rows[i].cells;
+function tableToArray(table, filename) {
+    var result = [];                                                //declare result array variable
+    var rows = table.rows;                                          //get table rows
+    var cells, t;                                                   //declare variables
+    for (var i = 0, iLen = rows.length; i < iLen; i++) {            //iterate over rows
+        cells = rows[i].cells;                                      //get columns
         t = [];
-        for (var j = 0, jLen = cells.length; j < jLen; j++) {  //iterate over cols
-            t.push(cells[j].childNodes[0].value);              //write data
+        for (var j = 0, jLen = cells.length; j < jLen; j++) {       //iterate over cols
+            t.push(cells[j].childNodes[0].value);                   //write data into child nodes (inputs)
         }
-        result.push(t);
+        (filename) ? result.push(t.join(";")) : result.push(t);     //if we need to download file - use append with delimiter
     }
-    console.log(result);                                       //log result for debug
+    //log result for debug
+    if (filename) downloadCsv(result.join("\n"), filename);        //if we need to download file use downloadCsv call
     return result;
 }
+
+
+//download result table function
+function downloadCsv(csv, filename) {
+    var csvFile;
+    var downloadLink;
+    csvFile = new Blob([csv], {type: "text/csv"}); //create entity of csv file
+    downloadLink = document.createElement("a");            //create download link
+    downloadLink.download = filename;                               //set file name
+    downloadLink.href = window.URL.createObjectURL(csvFile);        //create a link to the file
+    downloadLink.style.display = "none";                            // the link must be not displayed
+    document.body.appendChild(downloadLink);                        // add the link to DOM
+    downloadLink.click();                                           //export
+}
+
+//add event listener to exact id
+document.getElementById("downloadCsv").addEventListener("click", function () {
+    tableToArray(document.getElementById("dataTable"), "table.csv");
+});

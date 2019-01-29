@@ -29,7 +29,7 @@ public class AppController {
     }
 
     @PostMapping(value = "/calculate")
-    public ResponseEntity<String> getResult(@RequestParam ("arr") String str) {
+    public ResponseEntity<String> getResult(@RequestParam("arr") String str) {
 
         String[][] arrResult = calculation.evaluateTable
                 (Arrays.stream(str.substring(2, str.length() - 2)
