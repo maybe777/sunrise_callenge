@@ -1,5 +1,10 @@
 window.onload = fillTable(document.querySelector('#dataTable'), 5, 5); //build default table 5x5
 
+//add event listener to exact id for initiate download result
+document.getElementById("downloadCsv").addEventListener("click", function () {
+    tableToArray(document.getElementById("dataTable"), "table.csv");
+});
+
 //build table function
 function fillTable(table, rows, cols, csvData) {
     document.querySelector('#dataTable').innerHTML = '';//purge table b4 build new
@@ -42,46 +47,6 @@ function getSavedCell(v) {
     return localStorage.getItem(v);
 }
 
-
-function uploadCsv() {
-    var fileUpload = document.getElementById("csvFile");  //get file from element
-    var regex = /(.csv)$/;                                          //check extension
-    if (regex.test(fileUpload.value.toLowerCase())) {               //if extension is valid we begin read data
-        if (typeof (FileReader) != "undefined") {                   //check data consistency
-            var reader = new FileReader();                          //create reader object
-            reader.onload = function (e) {                          //set onload function
-                fillTable(document.querySelector('#dataTable'), null, null, e.target.result); //build table with file data
-            };
-            reader.readAsText(fileUpload.files[0]);                 //read bad data if there is any
-        } else {
-            alert("Используйте браузер с поддержкой HTML5");        //custom exception handle
-        }
-    } else {
-        alert("Просьба использовать файл с расширением *.csv");     //custom exception handle
-    }
-}
-
-
-//call result table
-function calculate() {
-    var arr = tableToArray(document.getElementById('dataTable'));   //get element
-
-    $.ajax({                                                //use ajax to call backend methods
-        url: "/calculate",
-        method: 'post',
-        data: {
-            arr: JSON.stringify(arr)
-        },
-        success: function (resultArr) {
-            console.log(resultArr);
-        },
-        error: function () {
-            console.log("fail");
-
-        }
-    });
-}
-
 //save cell contains into double dimensional array
 function tableToArray(table, filename) {
     var result = [];                                                //declare result array variable
@@ -100,6 +65,24 @@ function tableToArray(table, filename) {
     return result;
 }
 
+//function for import csv data-file
+function uploadCsv() {
+    var fileUpload = document.getElementById("csvFile");  //get file from element
+    var regex = /(.csv)$/;                                          //check extension
+    if (regex.test(fileUpload.value.toLowerCase())) {               //if extension is valid we begin read data
+        if (typeof (FileReader) != "undefined") {                   //check data consistency
+            var reader = new FileReader();                          //create reader object
+            reader.onload = function (e) {                          //set onload function
+                fillTable(document.querySelector('#dataTable'), null, null, e.target.result); //build table with file data
+            };
+            reader.readAsText(fileUpload.files[0]);                 //read bad data if there is any
+        } else {
+            alert("Используйте браузер с поддержкой HTML5");        //custom exception handle
+        }
+    } else {
+        alert("Просьба использовать файл с расширением *.csv");     //custom exception handle
+    }
+}
 
 //download result table function
 function downloadCsv(csv, filename) {
@@ -114,7 +97,22 @@ function downloadCsv(csv, filename) {
     downloadLink.click();                                           //export
 }
 
-//add event listener to exact id
-document.getElementById("downloadCsv").addEventListener("click", function () {
-    tableToArray(document.getElementById("dataTable"), "table.csv");
-});
+//call result table
+function calculate() {
+    var arr = tableToArray(document.getElementById('dataTable'));   //get element
+
+    $.ajax({
+        url: "/calculate",
+        method: 'post',
+        data: {
+            arr: JSON.stringify(arr)
+        },
+        success: function (resultArr) {
+            console.log(resultArr);
+        },
+        error: function () {
+            console.log("fail");
+
+        }
+    });
+}

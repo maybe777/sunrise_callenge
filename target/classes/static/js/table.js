@@ -2,12 +2,12 @@ window.onload = fillTable(document.querySelector('#dataTable'), 5, 5); //build d
 
 //build table function
 function fillTable(table, rows, cols, csvData) {
-    document.querySelector('#dataTable').innerHTML = '';//purge table b4 build new
+    document.querySelector('#dataTable').innerHTML = '';      //purge table b4 build new
     var row;
     var col = 0;
-    if (csvData) var data = csvData.split("\n");       //if data exists begin split into cell values
-    (rows) ? row = rows : row = data.length;                    //pick row value for overload method usage
-    for (var i = 0; i < row; i++) {                             //start build table
+    if (csvData) var data = csvData.split("\n");              //if data exists begin split into cell values
+    (rows) ? row = rows : row = data.length;                           //pick row value for overload method usage
+    for (var i = 0; i < row; i++) {                                    //start build table
         if (data != null) var cellData = data[i].split(";");  //if data exists split into rows
         var tr = document.createElement('tr');                //create row
         (cols) ? col = cols : col = cellData.length;                   //pick column value for overload method usage
@@ -66,7 +66,7 @@ function uploadCsv() {
 function calculate() {
     var arr = tableToArray(document.getElementById('dataTable'));   //get element
 
-    $.ajax({                                                //use ajax to call backend methods
+    $.ajax({                                                        //use ajax to call backend method
         url: "/calculate",
         method: 'post',
         data: {
@@ -96,7 +96,7 @@ function tableToArray(table, filename) {
         (filename) ? result.push(t.join(";")) : result.push(t);     //if we need to download file - use append with delimiter
     }
     //log result for debug
-    if (filename) downloadCsv(result.join("\n"), filename);        //if we need to download file use downloadCsv call
+    if (filename) downloadCsv(result.join("\n"), filename);         //if we need to download file use downloadCsv call
     return result;
 }
 
