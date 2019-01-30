@@ -2,10 +2,10 @@ window.onload = fillTable(document.querySelector('#dataTable'), 5, 5); //build d
 
 //add event listener to exact id for initiate download result
 document.getElementById("downloadCsv").addEventListener("click", function () {
-    tableToArray(document.getElementById("dataTable"), "table.csv");
+    tableToArray(document.getElementById("resultTable"), "table.csv");
 });
 
-//build table function
+//build default table || import CSV function
 function fillTable(table, rows, cols, csvData) {
     document.querySelector('#dataTable').innerHTML = '';//purge table b4 build new
     var row;
@@ -32,6 +32,24 @@ function fillTable(table, rows, cols, csvData) {
     }
 }
 
+//build result table function
+function buildResultTable(table, data) {
+    document.querySelector('#resultTable').innerHTML = '';    //purge table b4 build new
+    for (var i = 0; i < data.length; i++) {                            //start build table
+        var tr = document.createElement('tr');                //create row
+        for (var j = 0; j < data[i].length; j++) {                     //begin build columns
+            var cellId = String.fromCharCode(97 + j) + (i + 1); //get char code & generate cell id
+            var td = document.createElement('td');            //create td element
+            td.setAttribute('id', cellId);                //set id for cells
+            td.setAttribute('style', 'border: 1px solid #333; padding:7px') //customize table, just 4 pretty ^___^
+            data[i][j].match("err") ? td.innerHTML = (data[i][j].split(':')[2]) : td.innerHTML = (data[i][j]); //get error explanation
+            if (data[i][j].match("err")) td.setAttribute('bgcolor', 'FF0000');                       //set error bg-color:red
+            tr.appendChild(td); //append td in tr elements
+        }
+        table.appendChild(tr);  //build result table
+    }
+}
+
 //save sell value into local storage
 function saveCell(e) {
     var id = e.id;                          //get id property to save cell
@@ -47,7 +65,7 @@ function getSavedCell(v) {
     return localStorage.getItem(v);
 }
 
-//save cell contains into double dimensional array
+//convert table contains into double dimensional array for calculation || export
 function tableToArray(table, filename) {
     var result = [];                                                //declare result array variable
     var rows = table.rows;                                          //get table rows
@@ -56,12 +74,12 @@ function tableToArray(table, filename) {
         cells = rows[i].cells;                                      //get columns
         t = [];
         for (var j = 0, jLen = cells.length; j < jLen; j++) {       //iterate over cols
-            t.push(cells[j].childNodes[0].value);                   //write data into child nodes (inputs)
+            (filename) ? t.push(cells[j].innerHTML) : t.push(cells[j].childNodes[0].value); //file || write data into child nodes (inputs)
         }
         (filename) ? result.push(t.join(";")) : result.push(t);     //if we need to download file - use append with delimiter
     }
     //log result for debug
-    if (filename) downloadCsv(result.join("\n"), filename);        //if we need to download file use downloadCsv call
+    if (filename) downloadCsv(result.join("\n"), filename);         //if we need to download file use downloadCsv call
     return result;
 }
 
@@ -99,7 +117,7 @@ function downloadCsv(csv, filename) {
 
 //call result table
 function calculate() {
-    var arr = tableToArray(document.getElementById('dataTable'));   //get element
+    var arr = tableToArray(document.getElementById('dataTable'));                   //get element to calculate
 
     $.ajax({
         url: "/calculate",
@@ -108,7 +126,7 @@ function calculate() {
             arr: JSON.stringify(arr)
         },
         success: function (resultArr) {
-            console.log(resultArr);
+            buildResultTable(document.querySelector('#resultTable'), resultArr);    //build result
         },
         error: function () {
             console.log("fail");
