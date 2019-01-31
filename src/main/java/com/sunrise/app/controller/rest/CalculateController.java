@@ -1,6 +1,6 @@
 package com.sunrise.app.controller.rest;
 
-import com.sunrise.app.service.CalculationService;
+import com.sunrise.app.service.impl.CalculationServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,10 +12,10 @@ import java.util.Arrays;
 @RestController
 public class CalculateController {
 
-    private final CalculationService calculationService;
+    private final CalculationServiceImpl calculationService;
 
     @Autowired
-    public CalculateController(CalculationService calculationService) {
+    public CalculateController(CalculationServiceImpl calculationService) {
         this.calculationService = calculationService;
     }
 
