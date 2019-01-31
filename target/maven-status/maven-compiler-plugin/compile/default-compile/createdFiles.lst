@@ -1,5 +1,0 @@
-com/sunrise/app/controller/AppController.class
-com/sunrise/app/controller/rest/CalculateController.class
-com/sunrise/app/service/CalculationService.class
-com/sunrise/app/ApplicationStarter.class
-com/sunrise/app/exceptions/CellException.class
