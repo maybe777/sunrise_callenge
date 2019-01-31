@@ -2,7 +2,7 @@ window.onload = fillTable(document.querySelector('#dataTable'), 5, 5); //build d
 
 //add event listener to exact id for initiate download result
 document.getElementById("downloadCsv").addEventListener("click", function () {
-    tableToArray(document.getElementById("resultTable"), "result.csv");
+    tableToArray(document.getElementById("resultTable"), "table.csv");
 });
 
 //build default table || import CSV function
