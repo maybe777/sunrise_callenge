@@ -73,6 +73,14 @@ public class CalculationService {
                     } else {
                         return false;
                     }
+                } else if (ch == '(' && i > 0) {
+                    if (i > expr.length() - 3 || !"+-*/(".contains(Character.toString(expr.charAt(i - 1)))) {         //checking position of symbol '('. At the left there have to be operators or symbol '('
+                        return false;
+                    }
+                } else if (ch == ')' && i < expr.length() - 1) {
+                    if (i < 2 || !"+-*/)".contains(Character.toString(expr.charAt(i + 1)))) {                         //checking position of symbol ')'. At the right there have to be operators or symbol ')'
+                        return false;
+                    }
                 }
             }
         }
@@ -147,29 +155,29 @@ public class CalculationService {
                 temp.push(Double.parseDouble(a.toString()));                                //write into deque
                 i--;
             } else if (isOperator(input.charAt(i))) {                                       //if symbol is an operator we take last two deque values
-                try{
-                double a = temp.pop();
-                double b = temp.pop();
+                try {
+                    double a = temp.pop();
+                    double b = temp.pop();
 
-                switch (input.charAt(i)) {                                                  //and do exact action
-                    case '+':
-                        result = b + a;
-                        break;
-                    case '-':
-                        result = b - a;
-                        break;
-                    case '*':
-                        result = b * a;
-                        break;
-                    case '/':
-                        if (a == 0) {
-                            throw new ArithmeticException("Деление на ноль!");               //exception handle
-                        }
-                        result = b / a;
-                        break;
-                }
-                temp.push(result);                                                          //push result into deque
-            }catch (NoSuchElementException e){
+                    switch (input.charAt(i)) {                                                  //and do exact action
+                        case '+':
+                            result = b + a;
+                            break;
+                        case '-':
+                            result = b - a;
+                            break;
+                        case '*':
+                            result = b * a;
+                            break;
+                        case '/':
+                            if (a == 0) {
+                                throw new ArithmeticException("Деление на ноль!");               //exception handle
+                            }
+                            result = b / a;
+                            break;
+                    }
+                    temp.push(result);                                                          //push result into deque
+                } catch (NoSuchElementException e) {
                     throw new CellException("Отсутствует операнд!");
                 }
             }
