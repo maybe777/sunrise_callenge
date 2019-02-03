@@ -2,8 +2,12 @@ window.onload = fillTable(document.querySelector('#dataTable'), 5, 5); //build d
 
 //add event listener to exact id for initiate download result
 document.getElementById("downloadCsv").addEventListener("click", function () {
-    tableToArray(document.getElementById("resultTable"), "result.csv");
+    tableToCsv(document.getElementById("resultTable"),"result.csv" ,true);
 });
+document.getElementById("downloadCustomCsv").addEventListener("click", function () {
+    tableToCsv(document.getElementById("dataTable"), "pre_result.csv");
+});
+
 
 //build default table || import CSV function
 function fillTable(table, rows, cols, csvData) {
@@ -66,7 +70,7 @@ function getSavedCell(v) {
 }
 
 //convert table contains into double dimensional array for calculation || export
-function tableToArray(table, filename) {
+function tableToArray(table) {
     var result = [];                                                //declare result array variable
     var rows = table.rows;                                          //get table rows
     var cells, t;                                                   //declare variables
@@ -74,12 +78,28 @@ function tableToArray(table, filename) {
         cells = rows[i].cells;                                      //get columns
         t = [];
         for (var j = 0, jLen = cells.length; j < jLen; j++) {       //iterate over cols
-            (filename) ? t.push(cells[j].innerHTML) : t.push(cells[j].childNodes[0].value); //file || write data into child nodes (inputs)
+            t.push(cells[j].childNodes[0].value);                   // write data into child nodes (inputs)
         }
-        (filename) ? result.push(t.join(";")) : result.push(t);     //if we need to download file - use append with delimiter
+        result.push(t)
+    }
+    return result;
+}
+
+//convert table contains into double dimensional array for calculation || export
+function tableToCsv(table, filename, inner) {
+    var result = [];                                                //declare result array variable
+    var rows = table.rows;                                          //get table rows
+    var cells, t;                                                   //declare variables
+    for (var i = 0, iLen = rows.length; i < iLen; i++) {            //iterate over rows
+        cells = rows[i].cells;                                      //get columns
+        t = [];
+        for (var j = 0, jLen = cells.length; j < jLen; j++) {       //iterate over cols
+            (inner) ? t.push(cells[j].innerHTML) : t.push(cells[j].childNodes[0].value); //file || write data into child nodes (inputs)
+        }
+        result.push(t.join(";"));                                   //use append with delimiter
     }
     //log result for debug
-    if (filename) downloadCsv(result.join("\n"), filename);         //if we need to download file use downloadCsv call
+    downloadCsv(result.join("\n"), filename);                       //if we need to download file use downloadCsv call
     return result;
 }
 
